@@ -1,6 +1,10 @@
 import java.util.Set;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
+
 
 
 public class Main{
@@ -11,14 +15,18 @@ public class Main{
      checkDub(arr);
   }
   
-  public static void getMatch(int[] a, int v){
-     for(int i = 0; i < a.length-1;i++)
-      for(int j = i +1; j < a.length; j++){
-          if(a[i] + a[j] == v){
-              System.out.println("result = ["+i+","+j+"]");
-          }
+    public static void getMatch(int[] a, int v){
+    Map<Integer,Integer> hm = new HashMap<>();
+    
+    for(int i = 0; i < a.length; i++){
+      int isIt = v - a[i];
+      if(hm.containsKey(isIt)){
+         System.out.println("result = ["+hm.get(isIt)+","+i+"]");  
       }
+      hm.put(a[i],i);
+    }
   }
+
   
   public static void checkDub(int[] a){     
     Set<Integer> withOutDup = Arrays.stream(a).boxed().collect(Collectors.toSet());

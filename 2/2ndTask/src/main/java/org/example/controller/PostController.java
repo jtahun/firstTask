@@ -35,5 +35,21 @@ public class PostController {
                 .orElseThrow(() -> new NotFoundException("Post id=" + id + " не найден"));
     }
 
+    public List<Post> listAll() {
+        return postRepository.findAll();
+    }
 
+    public List<Post> listActive() {
+        return postRepository.findAll().stream()
+                .filter(p -> p.getStatus() == Status.ACTIVE)
+                .collect(Collectors.toList());
+    }
+
+    public Post update(long id, String title, String content, List<Long> labelIds) {
+        Post existing = getById(id);
+        if (existing.getStatus() == Status.DELETED) {
+            throw new DeletedEntityException("Post id=" + id + " удалён (DELETED), редактирование запрещено");
+        }
+        return existing;
+    }
 }

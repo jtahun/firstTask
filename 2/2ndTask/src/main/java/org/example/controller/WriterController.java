@@ -42,7 +42,11 @@ public class WriterController {
         return writerRepository.findAll();
     }
 
-
+    public List<Writer> listActive() {
+        return writerRepository.findAll().stream()
+                .filter(w -> w.getStatus() == Status.ACTIVE)
+                .collect(Collectors.toList());
+    }
 
 
 

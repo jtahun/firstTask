@@ -38,4 +38,15 @@ public class WriterController {
                 .orElseThrow(() -> new NotFoundException("Writer id=" + id + " не найден"));
     }
 
+    public List<Writer> listAll() {
+        return writerRepository.findAll();
+    }
+
+
+
+
+
+ 
+
+
 }

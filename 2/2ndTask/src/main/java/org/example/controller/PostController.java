@@ -1,5 +1,16 @@
 package ru.igor.crud.controller;
 
+import ru.igor.crud.exception.DeletedEntityException;
+import ru.igor.crud.exception.NotFoundException;
+import ru.igor.crud.exception.ValidationException;
+import ru.igor.crud.model.Post;
+import ru.igor.crud.model.Status;
+import ru.igor.crud.repository.label.LabelRepository;
+import ru.igor.crud.repository.post.PostRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PostController {
     private final PostRepository postRepository;
     private final LabelRepository labelRepository;
@@ -50,6 +61,39 @@ public class PostController {
         if (existing.getStatus() == Status.DELETED) {
             throw new DeletedEntityException("Post id=" + id + " удалён (DELETED), редактирование запрещено");
         }
+
+        if (title != null && !title.isBlank()) {
+            validateNotBlank(title, "title");
+            existing.setTitle(title);
+        }
+        if (content != null) {
+            existing.setContent(content);
+        }
+        if (labelIds != null) {
+            for (Long labelId : labelIds) {
+                var label = labelRepository.findById(labelId).orElseThrow(
+                        () -> new ValidationException("Label id=" + labelId + " не найден"));
+                if (label.getStatus() == Status.DELETED) {
+                    throw new ValidationException("Label id=" + labelId + " имеет статус DELETED");
+                }
+            }
+            existing.setLabelIds(labelIds);
+        }
+
+        postRepository.update(existing);
         return existing;
+    }
+
+    public void delete(long id) {
+        Post existing = getById(id);
+        if (existing.getStatus() == Status.DELETED) return;
+        existing.setStatus(Status.DELETED);
+        postRepository.update(existing);
+    }
+
+    private void validateNotBlank(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new ValidationException(field + " не должен быть пустым");
+        }
     }
 }

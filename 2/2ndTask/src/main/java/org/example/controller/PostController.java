@@ -11,7 +11,17 @@ public class PostController {
 
     public Post create(String title, String content, List<Long> labelIds) {
         validateNotBlank(title, "title");
-  
+
+        if (labelIds != null) {
+            for (Long labelId : labelIds) {
+                var label = labelRepository.findById(labelId).orElseThrow(
+                        () -> new ValidationException("Label id=" + labelId + " не найден"));
+                if (label.getStatus() == Status.DELETED) {
+                    throw new ValidationException("Label id=" + labelId + " имеет статус DELETED");
+                }
+            }
+        }
+
         Post p = new Post();
         p.setTitle(title);
         p.setContent(content == null ? "" : content);
@@ -24,5 +34,6 @@ public class PostController {
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Post id=" + id + " не найден"));
     }
+
 
 }

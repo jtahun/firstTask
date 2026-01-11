@@ -33,4 +33,9 @@ public class WriterController {
         return writerRepository.save(w);
     }
 
+    public Writer getById(long id) {
+        return writerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Writer id=" + id + " не найден"));
+    }
+
 }

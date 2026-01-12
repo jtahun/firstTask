@@ -31,7 +31,7 @@ public class GsonWriterRepositoryImpl implements WriterRepository {
     }
 
     private void saveWriters(List<Writer> writers) {
-        try (Writer writer = new FileWriter(FILE_PATH)) {
+        try (FileWriter writer = new FileWriter(FILE_PATH)) {
             gson.toJson(writers, writer);
         } catch (IOException e) {
             throw new RuntimeException("Error writing writers file", e);

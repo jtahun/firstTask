@@ -1,17 +1,48 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import org.example.view.LabelView;
+import org.example.view.PostView;
+import org.example.view.WriterView;
+
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        LabelView labelView = new LabelView(scanner);
+        PostView postView = new PostView(scanner);
+        WriterView writerView = new WriterView(scanner);
+
+        while (true) {
+            System.out.println("\n=== CRUD Console Application ===");
+            System.out.println("1. Действия с Labels");
+            System.out.println("2. Действия с Posts");
+            System.out.println("3. Действия с Writers");
+            System.out.println("4. Выход");
+            System.out.print("Выбери действие: ");
+
+            int choice;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+            } catch (Exception e) {
+                System.out.println("Invalid input! Please enter a number.");
+                scanner.nextLine(); // clear invalid input
+                continue;
+            }
+
+            switch (choice) {
+                case 1 -> labelView.showMenu();
+                case 2 -> postView.showMenu();
+                case 3 -> writerView.showMenu();
+                case 4 -> {
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    return;
+                }
+                default -> System.out.println("Invalid option! Нужно выбрать 1-4.");
+            }
         }
     }
 }

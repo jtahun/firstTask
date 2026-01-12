@@ -1,99 +1,65 @@
-package ru.igor.crud.controller;
+package org.example.controller;
 
-import ru.igor.crud.exception.DeletedEntityException;
-import ru.igor.crud.exception.NotFoundException;
-import ru.igor.crud.exception.ValidationException;
-import ru.igor.crud.model.Post;
-import ru.igor.crud.model.Status;
-import ru.igor.crud.repository.label.LabelRepository;
-import ru.igor.crud.repository.post.PostRepository;
+import org.example.model.Label;
+import org.example.model.Post;
+import org.example.repository.PostRepository;
+import org.example.repository.impl.GsonPostRepositoryImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PostController {
     private final PostRepository postRepository;
-    private final LabelRepository labelRepository;
+    private final LabelController labelController;
 
-    public PostController(PostRepository postRepository, LabelRepository labelRepository) {
-        this.postRepository = postRepository;
-        this.labelRepository = labelRepository;
+    public PostController() {
+        this.postRepository = new GsonPostRepositoryImpl();
+        this.labelController = new LabelController();
     }
 
-    public Post create(String title, String content, List<Long> labelIds) {
-        validateNotBlank(title, "title");
+    public Post getPostById(Long id) {
+        return postRepository.getById(id);
+    }
 
-        if (labelIds != null) {
-            for (Long labelId : labelIds) {
-                var label = labelRepository.findById(labelId).orElseThrow(
-                        () -> new ValidationException("Label id=" + labelId + " не найден"));
-                if (label.getStatus() == Status.DELETED) {
-                    throw new ValidationException("Label id=" + labelId + " имеет статус DELETED");
-                }
+    public List<Post> getAllPosts() {
+        return postRepository.getAll();
+    }
+
+    public Post createPost(String title, String content, List<Long> labelIds) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
+
+        for (Long labelId : labelIds) {
+            Label label = labelController.getLabelById(labelId);
+            if (label != null) {
+                post.getLabels().add(label);
             }
         }
 
-        Post p = new Post();
-        p.setTitle(title);
-        p.setContent(content == null ? "" : content);
-        p.setLabelIds(labelIds);
-        p.setStatus(Status.ACTIVE);
-        return postRepository.save(p);
+        return postRepository.save(post);
     }
 
-    public Post getById(long id) {
-        return postRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Post id=" + id + " не найден"));
-    }
-
-    public List<Post> listAll() {
-        return postRepository.findAll();
-    }
-
-    public List<Post> listActive() {
-        return postRepository.findAll().stream()
-                .filter(p -> p.getStatus() == Status.ACTIVE)
-                .collect(Collectors.toList());
-    }
-
-    public Post update(long id, String title, String content, List<Long> labelIds) {
-        Post existing = getById(id);
-        if (existing.getStatus() == Status.DELETED) {
-            throw new DeletedEntityException("Post id=" + id + " удалён (DELETED), редактирование запрещено");
+    public Post updatePost(Long id, String title, String content, List<Long> labelIds) {
+        Post post = postRepository.getById(id);
+        if (post == null) {
+            throw new RuntimeException("Post not found with id: " + id);
         }
 
-        if (title != null && !title.isBlank()) {
-            validateNotBlank(title, "title");
-            existing.setTitle(title);
-        }
-        if (content != null) {
-            existing.setContent(content);
-        }
-        if (labelIds != null) {
-            for (Long labelId : labelIds) {
-                var label = labelRepository.findById(labelId).orElseThrow(
-                        () -> new ValidationException("Label id=" + labelId + " не найден"));
-                if (label.getStatus() == Status.DELETED) {
-                    throw new ValidationException("Label id=" + labelId + " имеет статус DELETED");
-                }
+        post.setTitle(title);
+        post.setContent(content);
+        post.getLabels().clear();
+
+        for (Long labelId : labelIds) {
+            Label label = labelController.getLabelById(labelId);
+            if (label != null) {
+                post.getLabels().add(label);
             }
-            existing.setLabelIds(labelIds);
         }
 
-        postRepository.update(existing);
-        return existing;
+        return postRepository.update(post);
     }
 
-    public void delete(long id) {
-        Post existing = getById(id);
-        if (existing.getStatus() == Status.DELETED) return;
-        existing.setStatus(Status.DELETED);
-        postRepository.update(existing);
-    }
-
-    private void validateNotBlank(String value, String field) {
-        if (value == null || value.isBlank()) {
-            throw new ValidationException(field + " не должен быть пустым");
-        }
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
     }
 }

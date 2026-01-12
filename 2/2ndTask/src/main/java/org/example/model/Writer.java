@@ -1,4 +1,4 @@
-package ru.igor.crud.model;
+package org.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,46 +8,37 @@ public class Writer {
     private Long id;
     private String firstName;
     private String lastName;
-    private List<Long> postIds = new ArrayList<>();
-    private Status status = Status.ACTIVE;
+    private List<Post> posts;
+    private Status status;
 
-    public Writer() {}
+    public Writer() {
+        this.posts = new ArrayList<>();
+        this.status = Status.ACTIVE;
+    }
 
-    public Writer(Long id, String firstName, String lastName, List<Long> postIds, Status status) {
+    public Writer(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.postIds = (postIds == null) ? new ArrayList<>() : new ArrayList<>(postIds);
-        this.status = (status == null) ? Status.ACTIVE : status;
+        this.posts = new ArrayList<>();
+        this.status = Status.ACTIVE;
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
-
+    
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public List<Long> getPostIds() { return postIds; }
-    public void setPostIds(List<Long> postIds) {
-        this.postIds = (postIds == null) ? new ArrayList<>() : new ArrayList<>(postIds);
-    }
-
+    
+    public List<Post> getPosts() { return posts; }
+    public void setPosts(List<Post> posts) { this.posts = posts; }
+    
     public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = (status == null) ? Status.ACTIVE : status; }
-
-    @Override
-    public String toString() {
-        return "Writer{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", postIds=" + postIds +
-                ", status=" + status +
-                '}';
-    }
+    public void setStatus(Status status) { this.status = status; }
 
     @Override
     public boolean equals(Object o) {
@@ -60,5 +51,16 @@ public class Writer {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Writer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", posts=" + posts +
+                ", status=" + status +
+                '}';
     }
 }

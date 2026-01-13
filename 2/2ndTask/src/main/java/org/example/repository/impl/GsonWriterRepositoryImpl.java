@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GsonWriterRepositoryImpl implements WriterRepository {
     private static final String FILE_PATH = "src/main/resources/writers.json";
     private final Gson gson = new Gson();
-    private final AtomicLong currentId = new AtomicLong(1);
 
     private List<Writer> loadWriters() {
         try (Reader reader = new FileReader(FILE_PATH)) {
@@ -41,7 +40,7 @@ public class GsonWriterRepositoryImpl implements WriterRepository {
     private synchronized Long generateId() {
         List<Writer> writers = loadWriters();
         if (writers.isEmpty()) {
-            return currentId.get();
+            return 1L;
         }
         Long maxId = writers.stream()
                 .mapToLong(Writer::getId)

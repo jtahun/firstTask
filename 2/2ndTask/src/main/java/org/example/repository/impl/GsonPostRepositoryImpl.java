@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GsonPostRepositoryImpl implements PostRepository {
     private static final String FILE_PATH = "src/main/resources/posts.json";
     private final Gson gson = new Gson();
-    private final AtomicLong currentId = new AtomicLong(1);
 
     private List<Post> loadPosts() {
         try (Reader reader = new FileReader(FILE_PATH)) {
@@ -41,7 +40,7 @@ public class GsonPostRepositoryImpl implements PostRepository {
     private synchronized Long generateId() {
         List<Post> posts = loadPosts();
         if (posts.isEmpty()) {
-            return currentId.get();
+            return 1L;
         }
         Long maxId = posts.stream()
                 .mapToLong(Post::getId)

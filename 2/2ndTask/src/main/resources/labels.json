@@ -1,8 +1,1 @@
-[
-  {
-  "id":1,"name":"Local","status":"ACTIVE"
-},
-  {
-    "id":2,"name":"Check","status":"ACTIVE"
-  }
-]
+[{"id":1,"name":"Local","status":"ACTIVE"},{"id":2,"name":"Check","status":"DELETED"},{"id":3,"name":"Fantа","status":"ACTIVE"}]

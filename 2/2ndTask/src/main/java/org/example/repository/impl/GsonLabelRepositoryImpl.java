@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GsonLabelRepositoryImpl implements LabelRepository {
     private static final String FILE_PATH = "src/main/resources/labels.json";
     private final Gson gson = new Gson();
-    private final AtomicLong currentId = new AtomicLong(1);
 
     private List<Label> loadLabels() {
         try (Reader reader = new FileReader(FILE_PATH)) {
@@ -40,7 +39,7 @@ public class GsonLabelRepositoryImpl implements LabelRepository {
     private synchronized Long generateId() {
         List<Label> labels = loadLabels();
         if (labels.isEmpty()) {
-            return currentId.get();
+            return 1L;
         }
         Long maxId = labels.stream()
                 .mapToLong(Label::getId)

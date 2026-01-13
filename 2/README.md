@@ -15,11 +15,7 @@
 
 При удалении запись НЕ удаляется из файла — меняется `status` на `DELETED`.
 
-## Запуск (Maven)
-```bash
-mvn -q -DskipTests package
-java -jar target/console-crud-gson-1.0.0.jar
-```
+
 
 ## Примечания
 - Связи хранятся как списки id: Writer хранит `postIds`, Post хранит `labelIds`.

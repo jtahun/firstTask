@@ -1,60 +1,26 @@
-# CRUD Console Application
+# Console CRUD (Gson + JSON files)
 
-Простое консольное CRUD приложение для управления сущностями Writer, Post и Label с использованием JSON файлов в качестве хранилища данных.
+Консольное CRUD-приложение с сущностями:
 
-## Функциональность
+- Writer (id, firstName, lastName, postIds, status)
+- Post (id, title, content, labelIds, status)
+- Label (id, name, status)
+- Status: ACTIVE / DELETED (soft delete)
 
-- Создание, чтение, обновление и удаление (мягкое удаление) сущностей
-- Каждая сущность имеет статус (ACTIVE/DELETED)
-- Данные хранятся в JSON файлах
-- Консольный интерфейс для взаимодействия с пользователем
+## Хранилище
+Данные лежат в JSON файлах (текстовые файлы):
+- `data/writers.json`
+- `data/posts.json`
+- `data/labels.json`
 
-## Сущности
+При удалении запись НЕ удаляется из файла — меняется `status` на `DELETED`.
 
-### Writer
-- id: Long
-- firstName: String
-- lastName: String
-- posts: List<Post>
-- status: Status
+## Запуск (Maven)
+```bash
+mvn -q -DskipTests package
+java -jar target/console-crud-gson-1.0.0.jar
+```
 
-### Post
-- id: Long
-- title: String
-- content: String
-- labels: List<Label>
-- status: Status
-
-### Label
-- id: Long
-- name: String
-- status: Status
-
-### Status (enum)
-- ACTIVE
-- DELETED
-
-## Архитектура
-
-Приложение построено по многослойной архитектуре:
-
-1. **Model** - POJO классы сущностей
-2. **Repository** - доступ к данным в JSON файлах
-3. **Controller** - бизнес-логика приложения
-4. **View** - консольный интерфейс
-
-## Технологии
-
-- Java 11
-- Gson 2.8.9 (для работы с JSON)
-- Maven
-
-## Запуск приложения
-
-1. Клонируйте репозиторий
-2. Соберите проект: `mvn clean compile`
-3. Запустите: `mvn exec:java -Dexec.mainClass="com.example.Main"`
-
-## Использование
-
-При запуске откроется консольное меню с возможностью выбора действий для работы с каждой сущностью.
+## Примечания
+- Связи хранятся как списки id: Writer хранит `postIds`, Post хранит `labelIds`.
+- В меню есть вывод только ACTIVE и вывод ALL (ACTIVE + DELETED).

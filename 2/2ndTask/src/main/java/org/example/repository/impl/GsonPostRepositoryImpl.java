@@ -11,7 +11,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class GsonPostRepositoryImpl implements PostRepository {
     private static final String FILE_PATH = "src/main/resources/posts.json";
@@ -37,7 +36,7 @@ public class GsonPostRepositoryImpl implements PostRepository {
         }
     }
 
-    private synchronized Long generateId() {
+    private  Long generateId() {
         List<Post> posts = loadPosts();
         if (posts.isEmpty()) {
             return 1L;

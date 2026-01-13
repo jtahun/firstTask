@@ -11,7 +11,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class GsonWriterRepositoryImpl implements WriterRepository {
     private static final String FILE_PATH = "src/main/resources/writers.json";
@@ -37,7 +36,7 @@ public class GsonWriterRepositoryImpl implements WriterRepository {
         }
     }
 
-    private synchronized Long generateId() {
+    private  Long generateId() {
         List<Writer> writers = loadWriters();
         if (writers.isEmpty()) {
             return 1L;

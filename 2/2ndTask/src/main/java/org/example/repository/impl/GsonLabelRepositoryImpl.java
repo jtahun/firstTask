@@ -10,7 +10,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class GsonLabelRepositoryImpl implements LabelRepository {
     private static final String FILE_PATH = "src/main/resources/labels.json";
@@ -36,7 +35,7 @@ public class GsonLabelRepositoryImpl implements LabelRepository {
         }
     }
 
-    private synchronized Long generateId() {
+    private  Long generateId() {
         List<Label> labels = loadLabels();
         if (labels.isEmpty()) {
             return 1L;

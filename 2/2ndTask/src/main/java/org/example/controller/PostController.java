@@ -16,13 +16,9 @@ public class PostController {
         this.labelController = new LabelController();
     }
 
-    public Post getPostById(Long id) {
-        return postRepository.getById(id);
-    }
+    public Post getPostById(Long id) {return postRepository.getById(id);}
 
-    public List<Post> getAllPosts() {
-        return postRepository.getAll();
-    }
+    public List<Post> getAllPosts() {return postRepository.getAll();}
 
     public Post createPost(String title, String content, List<Long> labelIds) {
         Post post = new Post();

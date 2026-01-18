@@ -1,19 +1,16 @@
-package org.example;
-
-import org.example.view.LabelView;
-import org.example.view.PostView;
-import org.example.view.WriterView;
+package org.example.view;
 
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+public class MainView {
 
-        LabelView labelView = new LabelView(scanner);
-        PostView postView = new PostView(scanner);
-        WriterView writerView = new WriterView(scanner);
+    private final Scanner scanner = new Scanner(System.in);
 
+    LabelView labelView = new LabelView(scanner);
+    PostView postView = new PostView(scanner);
+    WriterView writerView = new WriterView(scanner);
+
+    public void start(){
         while (true) {
             System.out.println("\n=== CRUD Console Application ===");
             System.out.println("1. Действия с Labels");

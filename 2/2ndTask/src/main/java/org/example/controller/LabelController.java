@@ -9,17 +9,11 @@ import java.util.List;
 public class LabelController {
     private final LabelRepository labelRepository;
 
-    public LabelController() {
-        this.labelRepository = new GsonLabelRepositoryImpl();
-    }
+    public LabelController() {this.labelRepository = new GsonLabelRepositoryImpl();}
 
-    public Label getLabelById(Long id) {
-        return labelRepository.getById(id);
-    }
+    public Label getLabelById(Long id) {return labelRepository.getById(id);}
 
-    public List<Label> getAllLabels() {
-        return labelRepository.getAll();
-    }
+    public List<Label> getAllLabels() {return labelRepository.getAll();}
 
     public Label createLabel(String name) {
         Label label = new Label();
@@ -36,7 +30,5 @@ public class LabelController {
         return labelRepository.update(label);
     }
 
-    public void deleteLabel(Long id) {
-        labelRepository.deleteById(id);
-    }
+    public void deleteLabel(Long id) {labelRepository.deleteById(id);}
 }

@@ -40,7 +40,7 @@ public class GsonLabelRepositoryImpl implements LabelRepository {
         if (labels.isEmpty()) {
             return 1L;
         }
-        Long maxId = labels.stream()
+        long maxId = labels.stream()
                 .mapToLong(Label::getId)
                 .max()
                 .orElse(0L);

@@ -4,6 +4,7 @@ package org.example;
 import org.example.watergenapp.H2O;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
@@ -18,12 +19,24 @@ public class Main {
             System.out.println("=".repeat(40));
         }
     }
-    private static void testH2O(String water){
+    private static void testH2O(String water) throws InterruptedException {
       H2O h2o = new H2O();
-      StringBuilder sb = new StringBuilder();
+      StringBuilder result = new StringBuilder();
 
       ExecutorService executor = newFixedThreadPool(water.length());
+      executor.shutdown();
+      executor.awaitTermination(5, TimeUnit.SECONDS);
 
+      String output = result.toString();
+      System.out.println("Result: " + output);
+
+      if(isValidWaterMolecules(output)){
+
+      }
+    }
+
+    private static boolean isValidWaterMolecules(String output) {
+        return true;
     }
 }
 

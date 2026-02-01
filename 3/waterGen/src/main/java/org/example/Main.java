@@ -81,6 +81,15 @@ public class Main {
        }
       return true;
     }
+    private static boolean isValidMolecule(String molecule) {
+      int hCount = 0;
+      for (int i = 0; i < molecule.length(); i++) {
+        if (molecule.charAt(i) == 'H') {
+            hCount++;
+         }
+      }        
+      return hCount == 2 && molecule.length() == 3;
+    }
 }
 
 

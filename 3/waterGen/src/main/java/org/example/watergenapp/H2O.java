@@ -24,4 +24,5 @@ public class H2O {
     releaseHydrogen.run();
     awaitBarrier();
   }
+  private void awaitBarrier() throws InterruptedException {}
 }

@@ -5,6 +5,8 @@ import org.example.watergenapp.H2O;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
@@ -24,6 +26,36 @@ public class Main {
       StringBuilder result = new StringBuilder();
 
       ExecutorService executor = newFixedThreadPool(water.length());
+
+      for (int i = 0; i < water.length(); i++) {
+            char c = water.charAt(i);
+            if (c == 'H') {
+                executor.execute(() -> {
+                    try {
+                        h2o.hydrogen(() -> {
+                            synchronized (result) {
+                                result.append("H");
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else if (c == 'O') {
+                executor.execute(() -> {
+                    try {
+                        h2o.oxygen(() -> {
+                            synchronized (result) {
+                                result.append("O");
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        }  
+        
       executor.shutdown();
       executor.awaitTermination(5, TimeUnit.SECONDS);
 

@@ -70,7 +70,16 @@ public class Main {
     }
 
     private static boolean isValidWaterMolecules(String output) {
-        return true;
+      if (output.length() % 3 != 0) {
+            return false;
+       }        
+      for (int i = 0; i < output.length(); i += 3) {
+        String molecule = output.substring(i, i + 3);
+        if (!isValidMolecule(molecule)) {
+            return false;
+         }
+       }
+      return true;
     }
 }
 

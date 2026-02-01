@@ -63,7 +63,9 @@ public class Main {
       System.out.println("Result: " + output);
 
       if(isValidWaterMolecules(output)){
-
+        System.out.println("All Correct: 3 parts done");
+      }else{
+        System.out.println("ERROR: 3 parts not correct");
       }
     }
 

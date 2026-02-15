@@ -1,0 +1,72 @@
+
+public class Main{
+	public static void main(String[] args) {
+        Expression jun = getJavaJunior();
+        Expression dev = getJavaEEDeveloper();
+        
+        System.out.println("Does developer knows base stack: " + jun.interpreter("Java Core"));
+        System.out.println("Does developer got EE Expirience: " + dev.interpreter("Java Core Spring"));
+	}
+        
+    public static Expression getJavaJunior(){
+        Expression exp1 = new TerminalExpression("Java");
+        Expression exp2 = new TerminalExpression("Core");
+        return new OrExpression(exp1,exp2);
+    }
+    
+    public static Expression getJavaEEDeveloper(){
+        Expression exp1 = new TerminalExpression("Java Core");
+        Expression exp2 = new TerminalExpression("Spring");
+        return new AndExpression(exp1,exp2);
+    }
+	
+}
+
+
+interface Expression{
+    boolean interpreter(String contex);
+}
+
+class TerminalExpression implements Expression{
+    private final String data;
+    
+    public TerminalExpression(String data){
+        this.data = data;
+    }
+    
+    @Override
+    public boolean interpreter(String context){
+        return context.contains(data);
+    }
+}
+
+class OrExpression implements Expression{
+    private final Expression exp1;
+    private final Expression exp2;
+    
+    public OrExpression(Expression exp1, Expression exp2){
+        this.exp1=exp1;
+        this.exp2=exp2;
+    }
+    
+    @Override
+    public boolean interpreter(String context){
+        return exp1.interpreter(context) || exp2.interpreter(context);
+    }
+}
+
+
+class AndExpression implements Expression{
+    private final Expression exp1;
+    private final Expression exp2;
+    
+    public AndExpression(Expression exp1, Expression exp2){
+        this.exp1=exp1;
+        this.exp2=exp2;
+    }
+    
+    @Override
+    public boolean interpreter(String context){
+        return exp1.interpreter(context) && exp2.interpreter(context);
+    }
+}

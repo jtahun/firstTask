@@ -1,0 +1,40 @@
+
+abstract class WebSiteTemplate{
+    public void showPage(){
+        System.out.println("Header");
+        showPageContent();
+        System.out.println("Footer");
+    }
+    
+    public abstract void showPageContent();
+}
+
+class WelcomePage extends WebSiteTemplate{
+    @Override
+    public void showPageContent(){
+        System.out.println("Welcome");
+    }
+}
+
+class NewsPage extends WebSiteTemplate{
+    @Override
+    public void showPageContent(){
+        System.out.println("News");
+    }
+}
+
+
+
+public class Main
+{
+	public static void main(String[] args) {
+        WebSiteTemplate welcome = new WelcomePage();
+        WebSiteTemplate news = new NewsPage();
+        
+        welcome.showPage();
+        System.out.println("\n=====================================\n");
+        news.showPage();
+        
+	}
+}
+

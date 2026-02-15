@@ -1,0 +1,100 @@
+import java.util.List;
+import java.util.ArrayList;
+
+public class Main{
+	public static void main(String[] args) {
+		JayTextChat chat = new JayTextChat();
+		User admin = new Admin("Admin",chat);
+		User u1 = new JayUser("User_1",chat);
+		User u2 = new JayUser("User_2",chat);
+		
+		chat.setAdmin(admin);
+// 		chat.addUserToChat(admin);
+		chat.addUserToChat(u1);
+		chat.addUserToChat(u2);
+		
+		u1.sendMessage("I'am One...");
+		u2.sendMessage("I'am Two...");
+		admin.sendMessage("I'am Admin...");
+	}
+}
+
+interface Chat{
+    void sendMessage(String msg, User user);
+}
+
+interface User{
+    void getMessage(String msg);
+    void sendMessage(String msg);
+}
+
+class JayUser implements User{
+    private final String name;
+    private final Chat chat;
+    
+    public JayUser(String name, Chat chat){
+        this.chat = chat;
+        this.name = name;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
+    @Override
+    public void sendMessage(String msg){
+        chat.sendMessage(msg,this);
+    }
+    
+    @Override
+    public void getMessage(String msg){
+        System.out.println(name + " got this message: " + msg);
+    }
+}
+
+class Admin implements User{
+    private final String name;
+    private final Chat chat;
+    
+    public Admin(String name, Chat chat){
+        this.chat = chat;
+        this.name = name;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
+    @Override
+    public void sendMessage(String msg){
+        chat.sendMessage(msg,this);
+    }
+    
+    @Override
+    public void getMessage(String msg){
+        System.out.println(name + " got this message: " + msg);
+    }
+}
+
+class JayTextChat implements Chat{
+    User admin;
+    List<User> users = new ArrayList<>();
+    
+    public void setAdmin(User user){
+        admin = user;
+    }
+    
+    public void addUserToChat(User user){
+        users.add(user);
+    }
+    
+    @Override
+    public void sendMessage(String msg,User user){
+        for(User u:users){
+            if(u != user){
+                u.getMessage(msg);
+            }
+        }
+        admin.getMessage(msg);
+    }
+}

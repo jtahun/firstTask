@@ -1,100 +1,95 @@
-interface Developer{
-    void create(Test test);
-    void create(ProjectClass pc);
-    void create(Database db);
+interface Architect {
+    void design(Foundation foundation);
+    void design(Walls walls);
+    void design(Roof roof);
 }
 
-interface ProjectElement{
-    void beWriten(Developer developer);
+interface BuildingElement {
+    void beDesigned(Architect architect);
 }
 
-class Test implements ProjectElement {
+class Foundation implements BuildingElement {
     @Override
-    public void beWriten(Developer developer){
-        developer.create(this);
+    public void beDesigned(Architect architect) {
+        architect.design(this);
     }
 }
 
-class ProjectClass implements ProjectElement  {
+class Walls implements BuildingElement {
     @Override
-    public void beWriten(Developer developer){
-        developer.create(this);
+    public void beDesigned(Architect architect) {
+        architect.design(this);
     }
 }
 
-class Database implements ProjectElement {
+class Roof implements BuildingElement {
     @Override
-    public void beWriten(Developer developer){
-        developer.create(this);
+    public void beDesigned(Architect architect) {
+        architect.design(this);
     }
 }
 
-class JavaJune implements Developer{
+class JuniorArchitect implements Architect {
     @Override
-    public void create(ProjectClass pc){
-        System.out.println("Project created by June");
-    }
-    @Override
-    public void create(Database db){
-        System.out.println("Database created by June");
+    public void design(Foundation f) {
+        System.out.println("Фундамент: простой ленточный (проект Junior)");
     }
     
     @Override
-    public void create(Test test){
-        System.out.println("All test made by June");
-    }
-}
-
-class JavaSenior implements Developer{
-    @Override
-    public void create(ProjectClass pc){
-        System.out.println("SuperProject created by Senior");
-    }
-    @Override
-    public void create(Database db){
-        System.out.println("Fast Database created by Senior");
+    public void design(Walls w) {
+        System.out.println("Стены: кирпичные, стандартные (проект Junior)");
     }
     
     @Override
-    public void create(Test test){
-        System.out.println("All test made by Senior");
+    public void design(Roof r) {
+        System.out.println("Крыша: двускатная, шифер (проект Junior)");
     }
 }
 
-class Project implements ProjectElement{
-    private final ProjectElement[] pElements;
+class SeniorArchitect implements Architect {
+    @Override
+    public void design(Foundation f) {
+        System.out.println("Фундамент: монолитная плита с усилением (проект Senior)");
+    }
     
-    public Project(){
-        pElements = new ProjectElement[]{ 
-            new ProjectClass(), new Database(), new Test()
-            
+    @Override
+    public void design(Walls w) {
+        System.out.println("Стены: газобетон с утеплением (проект Senior)");
+    }
+    
+    @Override
+    public void design(Roof r) {
+        System.out.println("Крыша: мансардная, металлочерепица (проект Senior)");
+    }
+}
+
+class BuildingProject implements BuildingElement {
+    private final BuildingElement[] elements;
+    
+    public BuildingProject() {
+        elements = new BuildingElement[] {
+            new Foundation(), new Walls(), new Roof()
         };
-   }
-   @Override
-   public void beWriten(Developer developer){
-       for(ProjectElement pe : pElements){
-           pe.beWriten(developer);
-       }
-   }
+    }
+    
+    @Override
+    public void beDesigned(Architect architect) {
+        for (BuildingElement element : elements) {
+            element.beDesigned(architect);
+        }
+    }
 }
 
-
-public class Main
-{
-	public static void main(String[] args) {
-      Project project = new Project();
-      Developer june = new JavaJune();
-      Developer senior = new JavaSenior();
-      
-      System.out.println("June Did it...");
-      project.beWriten(june);
-      
-      
-      System.out.println("\n=====================\n");
-      
-      System.out.println("Good Job by senior!!!");
-      project.beWriten(senior);
+public class Main {
+    public static void main(String[] args) {
+        BuildingProject project = new BuildingProject();
+        Architect junior = new JuniorArchitect();
+        Architect senior = new SeniorArchitect();
         
-	}
+        System.out.println("Проект от Junior архитектора:");
+        project.beDesigned(junior);
+        
+        System.out.println("\nПроект от Senior архитектора:");
+        project.beDesigned(senior);
+    }
 }
-

@@ -1,59 +1,74 @@
-
-
-public class Main
-{
-	public static void main(String[] args) {
-        Activity activity = new Sleeping();
-        Developer dev = new Developer();
-        dev.setActivity(activity);
+public class Main {
+    public static void main(String[] args) {
+        Day currentDay = new Monday();
+        WeekSchedule schedule = new WeekSchedule();
+        schedule.setDay(currentDay);
         
-        for(int i = 0;i < 10; i++){
-            dev.justDoIt();
-            dev.changeActivity();
-        }
-	}
-}
-
-interface Activity {
-    void justDoIt();
-}
-
-class Coding implements Activity{
-    public void justDoIt(){System.out.println("Writing code");}
-}
-
-
-class Reading implements Activity{
-    public void justDoIt(){System.out.println("Reading a book");}
-}
-
-class Training implements Activity{
-    public void justDoIt(){System.out.println("Get fitness");}
-}
-
-
-class Sleeping implements Activity{
-    public void justDoIt(){System.out.println("Sleeping...");}
-}
-
-class Developer{
-    private Activity activity;
-    
-    public void setActivity(Activity activity){
-        this.activity = activity;
-    }
-    
-    public void changeActivity(){
-        if(activity instanceof Sleeping){
-            setActivity(new Training());
-        }else if(activity instanceof Training){
-            setActivity(new Coding());
-        }else if(activity instanceof Coding){
-            setActivity(new Reading());
-        }else if(activity instanceof Reading){
-            setActivity(new Sleeping());
+        for (int i = 0; i < 7; i++) {
+            schedule.whatToDo();
+            schedule.nextDay();
         }
     }
+}
+
+interface Day {
+    void whatToDo();
+}
+
+class Monday implements Day {
+    public void whatToDo() { System.out.println("Понедельник: Начать новую неделю"); }
+}
+
+class Tuesday implements Day {
+    public void whatToDo() { System.out.println("Вторник: Работа над проектом"); }
+}
+
+class Wednesday implements Day {
+    public void whatToDo() { System.out.println("Среда: Середина недели, встреча с командой"); }
+}
+
+class Thursday implements Day {
+    public void whatToDo() { System.out.println("Четверг: Завершение задач"); }
+}
+
+class Friday implements Day {
+    public void whatToDo() { System.out.println("Пятница: Подведение итогов"); }
+}
+
+class Saturday implements Day {
+    public void whatToDo() { System.out.println("Суббота: Отдых с семьей"); }
+}
+
+class Sunday implements Day {
+    public void whatToDo() { System.out.println("Воскресенье: Подготовка к новой неделе"); }
+}
+
+class WeekSchedule {
+    private Day currentDay;
     
-    public void justDoIt(){activity.justDoIt();}
+    public void setDay(Day day) {
+        this.currentDay = day;
+    }
+    
+    public void nextDay() {
+        if (currentDay instanceof Monday) {
+            setDay(new Tuesday());
+        } else if (currentDay instanceof Tuesday) {
+            setDay(new Wednesday());
+        } else if (currentDay instanceof Wednesday) {
+            setDay(new Thursday());
+        } else if (currentDay instanceof Thursday) {
+            setDay(new Friday());
+        } else if (currentDay instanceof Friday) {
+            setDay(new Saturday());
+        } else if (currentDay instanceof Saturday) {
+            setDay(new Sunday());
+        } else if (currentDay instanceof Sunday) {
+            setDay(new Monday());
+        }
+    }
+    
+    public void whatToDo() {
+        currentDay.whatToDo();
+    }
 }

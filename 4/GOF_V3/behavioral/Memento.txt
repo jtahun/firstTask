@@ -74,7 +74,7 @@ public class Main{
         
         System.out.println("Rolling back project to v1.0");
         project.load(ghr.getSave());
-        System.out.println(project);
+        System.out.println(project); 
         
 	}
 }

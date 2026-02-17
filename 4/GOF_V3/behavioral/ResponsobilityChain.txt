@@ -1,89 +1,83 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
- class Priority{
-    public static final int ROUTINE = 1;
-    public static final int IMPORTANT = 2;
-    public static final int ASAP = 3;
+class Level {
+    public static final int BASIC = 1;
+    public static final int ADVANCED = 2;
+    public static final int EXPERT = 3;
 }
 
- abstract class Notifier{
-    private final int priority;
-    private Notifier nextNotifier;
+abstract class SupportHandler {
+    private final int level;
+    private SupportHandler nextHandler;
 
-    public Notifier(int priority){
-        this.priority = priority;
+    public SupportHandler(int level) {
+        this.level = level;
     }
     
-    public void setNextNotifier(Notifier notifier){
-        this.nextNotifier = notifier;
+    public void setNextHandler(SupportHandler handler) {
+        this.nextHandler = handler;
     }
     
-    public void nofifyManager(String msg, int level){
-        if(level >= priority){
-            write(msg);
+    public void handleRequest(String issue, int issueLevel) {
+        if (issueLevel >= level) {
+            resolve(issue);
         }
-        if(nextNotifier != null){
-            nextNotifier.nofifyManager(msg,level);
+        if (nextHandler != null) {
+            nextHandler.handleRequest(issue, issueLevel);
         }
     }
     
-    public abstract void write(String msg);
-    
+    public abstract void resolve(String issue);
 }
 
- class SimpleNotifier extends Notifier{
-    public SimpleNotifier(int priority){
-        super(priority);
-    }
-    
-    @Override
-    public void write(String msg){
-        System.out.println("SimpleNotifier "+ msg);
-    }
-}
-
- class SmsNotifier extends Notifier{
-    public SmsNotifier(int priority){
-        super(priority);
+class BasicSupport extends SupportHandler {
+    public BasicSupport(int level) {
+        super(level);
     }
     
     @Override
-    public void write(String msg){
-        System.out.println("SmsNotifier "+msg);
+    public void resolve(String issue) {
+        System.out.println("Basic Support: " + issue + " - проблема решена (базовый уровень)");
     }
 }
 
- class EmailNotifier extends Notifier{
-    public EmailNotifier(int priority){
-        super(priority);
+class AdvancedSupport extends SupportHandler {
+    public AdvancedSupport(int level) {
+        super(level);
     }
     
     @Override
-    public void write(String msg){
-        System.out.println("EmailNotifier "+ msg);
+    public void resolve(String issue) {
+        System.out.println("Advanced Support: " + issue + " - требуется диагностика (продвинутый уровень)");
     }
 }
 
+class ExpertSupport extends SupportHandler {
+    public ExpertSupport(int level) {
+        super(level);
+    }
+    
+    @Override
+    public void resolve(String issue) {
+        System.out.println("Expert Support: " + issue + " - срочное вмешательство! (экспертный уровень)");
+    }
+}
 
-
-public class Main
-{
-	public static void main(String[] args) {
-		Notifier simpleNotifier =  new SimpleNotifier(Priority.ROUTINE);
-		Notifier smsNotifier = new SmsNotifier(Priority.IMPORTANT);
-		Notifier emailNotifier = new EmailNotifier(Priority.ASAP);
-		
-		simpleNotifier.setNextNotifier(smsNotifier);
-		smsNotifier.setNextNotifier(emailNotifier);
-		
-		simpleNotifier.nofifyManager("Everything is OK ",Priority.ROUTINE);
-		simpleNotifier.nofifyManager("WARNING! ",Priority.IMPORTANT);
-		simpleNotifier.nofifyManager("DANGER!! ",Priority.ASAP);
-	}
+public class Main {
+    public static void main(String[] args) {
+        SupportHandler basic = new BasicSupport(Level.BASIC);
+        SupportHandler advanced = new AdvancedSupport(Level.ADVANCED);
+        SupportHandler expert = new ExpertSupport(Level.EXPERT);
+        
+        basic.setNextHandler(advanced);
+        advanced.setNextHandler(expert);
+        
+        System.out.println("=== Запросы в службу поддержки ===");
+        System.out.println("\nЗапрос 1: Проблема с паролем");
+        basic.handleRequest("Проблема с паролем", Level.BASIC);
+        
+        System.out.println("\nЗапрос 2: Ошибка в приложении");
+        basic.handleRequest("Ошибка в приложении", Level.ADVANCED);
+        
+        System.out.println("\nЗапрос 3: Критический сбой сервера");
+        basic.handleRequest("Критический сбой сервера", Level.EXPERT);
+    }
 }

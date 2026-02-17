@@ -1,81 +1,75 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 import java.util.ArrayList;
 import java.util.List;
 
-interface Observer{
-    void handlEvent(List<String> vacancies);
+interface Observer {
+    void handleEvent(List<String> news);
 }
 
-interface Observed{
+interface Observed {
     void addObserver(Observer observer);
     void removeObserver(Observer observer);
-    void notifyObserver();
+    void notifyObservers();
 }
 
-class Subcriber implements Observer{
+class Subscriber implements Observer {
     private final String name;
     
-    public Subcriber(String name){
+    public Subscriber(String name) {
         this.name = name;
     }
     
     @Override
-    public void handlEvent(List<String> vacancies){
-        System.out.println("Dear "+ name +    " list of vacancies is changed: " + vacancies);
+    public void handleEvent(List<String> news) {
+        System.out.println("Dear " + name + ", latest news: " + news);
     }
 }
 
-class JavaDeveloperJobSite implements Observed{
-    private List<String> vacancies = new ArrayList<>();
-    private List<Observer> subcribers = new ArrayList<>();
+class NewsAgency implements Observed {
+    private List<String> news = new ArrayList<>();
+    private List<Observer> subscribers = new ArrayList<>();
     
-    public void addVacancy(String vacancy){
-        vacancies.add(vacancy);
-        notifyObserver();
+    public void addNews(String newsItem) {
+        news.add(newsItem);
+        notifyObservers();
     }
     
-    public void removeVacancy(String vacancy){
-        vacancies.remove(vacancy);
-        notifyObserver();
+    public void removeNews(String newsItem) {
+        news.remove(newsItem);
+        notifyObservers();
     }
     
     @Override
-    public void addObserver(Observer observer){ subcribers.add(observer);}
+    public void addObserver(Observer observer) { 
+        subscribers.add(observer); 
+    }
     
     @Override
-    public void removeObserver(Observer observer){subcribers.remove(observer);}
+    public void removeObserver(Observer observer) {
+        subscribers.remove(observer); 
+    }
     
     @Override
-    public void notifyObserver(){
-        for(Observer o: subcribers){
-            o.handlEvent(vacancies);
+    public void notifyObservers() {
+        for (Observer o : subscribers) {
+            o.handleEvent(news);
         }
     }
 }
 
-
-public class Main
-{
-	public static void main(String[] args) {
-		JavaDeveloperJobSite js = new JavaDeveloperJobSite();
-		
-	    js.addVacancy("first Java Job");
-	    js.addVacancy("second Java Job");
-	    
-	    Observer dev1 = new Subcriber("John Doe");
-	    Observer dev2 = new Subcriber("George McFly");
-	    
-	    js.addObserver(dev1);
-	    js.addObserver(dev2);
-	    
-	    js.addVacancy("third Java vacancy");
-	    js.removeVacancy("first Java Job");
-	}
+public class Main {
+    public static void main(String[] args) {
+        NewsAgency agency = new NewsAgency();
+        
+        agency.addNews("Breaking: Market hits record high");
+        agency.addNews("Weather forecast: Sunny all week");
+        
+        Observer subscriber1 = new Subscriber("John Doe");
+        Observer subscriber2 = new Subscriber("Jane Smith");
+        
+        agency.addObserver(subscriber1);
+        agency.addObserver(subscriber2);
+        
+        agency.addNews("Sports: Local team wins championship");
+        agency.removeNews("Weather forecast: Sunny all week");
+    }
 }

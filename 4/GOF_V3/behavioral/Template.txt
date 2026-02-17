@@ -1,40 +1,57 @@
-
-abstract class WebSiteTemplate{
-    public void showPage(){
-        System.out.println("Header");
-        showPageContent();
-        System.out.println("Footer");
+abstract class BeverageRecipe {
+    public void prepare() {
+        boilWater();
+        brew();
+        pourInCup();
+        addCondiments();
+        System.out.println("Напиток готов!\n");
     }
     
-    public abstract void showPageContent();
+    private void boilWater() {
+        System.out.println("Кипятим воду");
+    }
+    
+    private void pourInCup() {
+        System.out.println("Наливаем в чашку");
+    }
+    
+    public abstract void brew();
+    public abstract void addCondiments();
 }
 
-class WelcomePage extends WebSiteTemplate{
+class TeaRecipe extends BeverageRecipe {
     @Override
-    public void showPageContent(){
-        System.out.println("Welcome");
+    public void brew() {
+        System.out.println("Завариваем чайный пакетик");
+    }
+    
+    @Override
+    public void addCondiments() {
+        System.out.println("Добавляем лимон и сахар");
     }
 }
 
-class NewsPage extends WebSiteTemplate{
+class CoffeeRecipe extends BeverageRecipe {
     @Override
-    public void showPageContent(){
-        System.out.println("News");
+    public void brew() {
+        System.out.println("Завариваем молотый кофе");
+    }
+    
+    @Override
+    public void addCondiments() {
+        System.out.println("Добавляем молоко и сахар");
     }
 }
 
-
-
-public class Main
-{
-	public static void main(String[] args) {
-        WebSiteTemplate welcome = new WelcomePage();
-        WebSiteTemplate news = new NewsPage();
+public class Main {
+    public static void main(String[] args) {
+        BeverageRecipe tea = new TeaRecipe();
+        BeverageRecipe coffee = new CoffeeRecipe();
         
-        welcome.showPage();
-        System.out.println("\n=====================================\n");
-        news.showPage();
+        System.out.println("Приготовление чая:");
+        tea.prepare();
         
-	}
+        System.out.println("Приготовление кофе:");
+        coffee.prepare();
+    }
 }
-

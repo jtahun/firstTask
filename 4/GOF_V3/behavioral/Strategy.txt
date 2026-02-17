@@ -1,50 +1,49 @@
-
-
-public class Main
-{
-	public static void main(String[] args) {
-        Developer dev = new Developer();
+public class Main {
+    public static void main(String[] args) {
+        Vehicle vehicle = new Vehicle();
         
-        dev.setActivity(new Sleeping());
-        dev.executeActivity();
-                
-        dev.setActivity(new Training());
-        dev.executeActivity();
-                
-        dev.setActivity(new Coding());
-        dev.executeActivity();
-                
-        dev.setActivity(new Reading());
-        dev.executeActivity();
-	}
+        vehicle.setMode(new Walking());
+        vehicle.executeMode();
+        
+        vehicle.setMode(new Biking());
+        vehicle.executeMode();
+        
+        vehicle.setMode(new Driving());
+        vehicle.executeMode();
+        
+        vehicle.setMode(new Flying());
+        vehicle.executeMode();
+    }
 }
 
-interface Activity {
-    void justDoIt();
+interface TransportMode {
+    void move();
 }
 
-class Coding implements Activity{
-    public void justDoIt(){System.out.println("Writing code");}
+class Walking implements TransportMode {
+    public void move() { System.out.println("Иду пешком (скорость 5 км/ч)"); }
 }
 
-
-class Reading implements Activity{
-    public void justDoIt(){System.out.println("Reading a book");}
+class Biking implements TransportMode {
+    public void move() { System.out.println("Еду на велосипеде (скорость 20 км/ч)"); }
 }
 
-class Training implements Activity{
-    public void justDoIt(){System.out.println("Get fitness");}
+class Driving implements TransportMode {
+    public void move() { System.out.println("Еду на машине (скорость 60 км/ч)"); }
 }
 
-
-class Sleeping implements Activity{
-    public void justDoIt(){System.out.println("Sleeping...");}
+class Flying implements TransportMode {
+    public void move() { System.out.println("Лечу на самолете (скорость 900 км/ч)"); }
 }
 
-class Developer{
-    private Activity activity;
+class Vehicle {
+    private TransportMode mode;
     
-    public void setActivity(Activity activity){this.activity = activity;}
+    public void setMode(TransportMode mode) {
+        this.mode = mode;
+    }
     
-    public void executeActivity(){activity.justDoIt();}
+    public void executeMode() {
+        mode.move();
+    }
 }

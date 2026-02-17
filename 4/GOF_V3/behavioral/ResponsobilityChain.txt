@@ -1,0 +1,89 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+ class Priority{
+    public static final int ROUTINE = 1;
+    public static final int IMPORTANT = 2;
+    public static final int ASAP = 3;
+}
+
+ abstract class Notifier{
+    private final int priority;
+    private Notifier nextNotifier;
+
+    public Notifier(int priority){
+        this.priority = priority;
+    }
+    
+    public void setNextNotifier(Notifier notifier){
+        this.nextNotifier = notifier;
+    }
+    
+    public void nofifyManager(String msg, int level){
+        if(level >= priority){
+            write(msg);
+        }
+        if(nextNotifier != null){
+            nextNotifier.nofifyManager(msg,level);
+        }
+    }
+    
+    public abstract void write(String msg);
+    
+}
+
+ class SimpleNotifier extends Notifier{
+    public SimpleNotifier(int priority){
+        super(priority);
+    }
+    
+    @Override
+    public void write(String msg){
+        System.out.println("SimpleNotifier "+ msg);
+    }
+}
+
+ class SmsNotifier extends Notifier{
+    public SmsNotifier(int priority){
+        super(priority);
+    }
+    
+    @Override
+    public void write(String msg){
+        System.out.println("SmsNotifier "+msg);
+    }
+}
+
+ class EmailNotifier extends Notifier{
+    public EmailNotifier(int priority){
+        super(priority);
+    }
+    
+    @Override
+    public void write(String msg){
+        System.out.println("EmailNotifier "+ msg);
+    }
+}
+
+
+
+public class Main
+{
+	public static void main(String[] args) {
+		Notifier simpleNotifier =  new SimpleNotifier(Priority.ROUTINE);
+		Notifier smsNotifier = new SmsNotifier(Priority.IMPORTANT);
+		Notifier emailNotifier = new EmailNotifier(Priority.ASAP);
+		
+		simpleNotifier.setNextNotifier(smsNotifier);
+		smsNotifier.setNextNotifier(emailNotifier);
+		
+		simpleNotifier.nofifyManager("Everything is OK ",Priority.ROUTINE);
+		simpleNotifier.nofifyManager("WARNING! ",Priority.IMPORTANT);
+		simpleNotifier.nofifyManager("DANGER!! ",Priority.ASAP);
+	}
+}

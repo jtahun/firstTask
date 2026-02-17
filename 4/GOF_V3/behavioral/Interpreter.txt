@@ -1,0 +1,68 @@
+interface Recipe{
+  boolean interpret(String ingredients);
+}
+
+class TerminalRecipe implements Recipe{
+  private final String ingredient;
+
+  public TerminalRecipe(String ingredient){this.ingredient = ingredient;}
+
+  @Override
+  public boolean interpret(String ingredients){
+	return ingredients.contains(ingredient);  
+  }    
+}
+
+class OrRecipe implements Recipe{
+  private final Recipe recipe1;
+  private final Recipe recipe2;
+  
+  public OrRecipe(Recipe r1, Recipe r2){
+    this.recipe1 = r1;
+	this.recipe2 = r2;
+  }
+  
+  @Override
+  public boolean interpret(String ingredients){
+    return recipe1.interpret(ingredients) || recipe2.interpret(ingredients);
+  }
+}
+
+class AndRecipe implements Recipe{
+  private final Recipe recipe1;
+  private final Recipe recipe2;
+  
+  public AndRecipe(Recipe r1, Recipe r2){
+    this.recipe1 = r1;
+	this.recipe2 = r2;
+  }
+  
+  @Override
+  public boolean interpret(String ingredients){
+    return recipe1.interpret(ingredients) && recipe2.interpret(ingredients);
+  }
+}
+
+public class Main{
+  public static void main(String[] args){
+    Recipe simplePizza = getSimplePizza();
+	Recipe authorPizza = getAuthorPizza();
+	
+	System.out.println("It is pass to Simple pizza: " + simplePizza.interpret("тесто сыр"));
+	System.out.println("It is pass to Author pizza: " + authorPizza.interpret("тесто сыр трюфель"));
+  }
+  
+  public static Recipe getSimplePizza(){
+    Recipe recipe1 = new TerminalRecipe("тесто");
+	Recipe recipe2 = new TerminalRecipe("сыр");
+	return new OrRecipe(recipe1, recipe2);
+  }
+  
+  public static Recipe getAuthorPizza(){
+    Recipe recipe1 = new TerminalRecipe("тесто");
+	Recipe recipe2 = new TerminalRecipe("сыр");
+	Recipe recipe3 = new TerminalRecipe("трюфель");
+	Recipe and1 = new AndRecipe(recipe1,recipe2);	
+	return new AndRecipe(and1, recipe3);
+  }  
+}

@@ -1,0 +1,81 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+import java.util.ArrayList;
+import java.util.List;
+
+interface Observer{
+    void handlEvent(List<String> vacancies);
+}
+
+interface Observed{
+    void addObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObserver();
+}
+
+class Subcriber implements Observer{
+    private final String name;
+    
+    public Subcriber(String name){
+        this.name = name;
+    }
+    
+    @Override
+    public void handlEvent(List<String> vacancies){
+        System.out.println("Dear "+ name +    " list of vacancies is changed: " + vacancies);
+    }
+}
+
+class JavaDeveloperJobSite implements Observed{
+    private List<String> vacancies = new ArrayList<>();
+    private List<Observer> subcribers = new ArrayList<>();
+    
+    public void addVacancy(String vacancy){
+        vacancies.add(vacancy);
+        notifyObserver();
+    }
+    
+    public void removeVacancy(String vacancy){
+        vacancies.remove(vacancy);
+        notifyObserver();
+    }
+    
+    @Override
+    public void addObserver(Observer observer){ subcribers.add(observer);}
+    
+    @Override
+    public void removeObserver(Observer observer){subcribers.remove(observer);}
+    
+    @Override
+    public void notifyObserver(){
+        for(Observer o: subcribers){
+            o.handlEvent(vacancies);
+        }
+    }
+}
+
+
+public class Main
+{
+	public static void main(String[] args) {
+		JavaDeveloperJobSite js = new JavaDeveloperJobSite();
+		
+	    js.addVacancy("first Java Job");
+	    js.addVacancy("second Java Job");
+	    
+	    Observer dev1 = new Subcriber("John Doe");
+	    Observer dev2 = new Subcriber("George McFly");
+	    
+	    js.addObserver(dev1);
+	    js.addObserver(dev2);
+	    
+	    js.addVacancy("third Java vacancy");
+	    js.removeVacancy("first Java Job");
+	}
+}

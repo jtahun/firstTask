@@ -1,0 +1,120 @@
+interface Command{
+  void execute();	
+}
+
+class TrafficLight{
+	public void red(){
+	  System.out.println("Krasnyj = STOP");
+	}
+	
+	public void yellow(){
+	  System.out.println("Zheltyj = Be Ready");
+	}
+	
+	public void green(){
+	  System.out.println("Zelenyj = Mozhno dvigatca");
+	}
+	
+	public void off(){
+	  System.out.println("Stetofor vykluchen bud ostorozhen");
+	}
+}
+
+class RedCommand implements Command{
+  private TrafficLight light;
+
+  public RedCommand(TrafficLight light){
+	this.light = light;  
+  }
+  
+  @Override
+  public void execute(){
+	light.red();  
+  }  
+}
+
+class YellowCommand implements Command{
+  private TrafficLight light;
+
+  public YellowCommand(TrafficLight light){
+	this.light = light;  
+  }
+  
+  @Override
+  public void execute(){
+	light.yellow();  
+  }  
+}
+
+class GreenCommand implements Command{
+  private TrafficLight light;
+
+  public GreenCommand(TrafficLight light){
+	this.light = light;  
+  }
+  
+  @Override
+  public void execute(){
+	light.green();  
+  }  
+}
+
+class OffCommand implements Command{
+  private TrafficLight light;
+
+  public OffCommand(TrafficLight light){
+	this.light = light;  
+  }
+  
+  @Override
+  public void execute(){
+	light.off();  
+  }  
+}
+
+class TrafficController{
+  private Command red;
+  private Command yellow;
+  private Command green;
+  private Command off;
+
+  public TrafficController(Command red, Command yellow, Command green, Command off){
+	this.red = red;
+    this.yellow = yellow;
+    this.green = green;
+    this.off = off;	
+  }
+
+  public void stop(){
+    red.execute();
+  }	  
+  
+  public void prepare(){
+    yellow.execute();
+  }
+  
+  public void go(){
+    green.execute();
+  }
+  
+  public void shutdown(){
+    off.execute();
+  }
+}
+
+public class Main{
+  public static void main(String[] args){
+	TrafficLight light = new TrafficLight();
+    
+    TrafficController controller = new TrafficController(
+	  new RedCommand(light),
+      new YellowCommand(light),
+      new GreenCommand(light),
+      new OffCommand(light)	  
+    );
+    controller.stop();
+    controller.prepare();
+    controller.go();
+    controller.shutdown();
+  }
+}

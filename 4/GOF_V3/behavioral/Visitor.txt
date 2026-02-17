@@ -1,0 +1,100 @@
+interface Developer{
+    void create(Test test);
+    void create(ProjectClass pc);
+    void create(Database db);
+}
+
+interface ProjectElement{
+    void beWriten(Developer developer);
+}
+
+class Test implements ProjectElement {
+    @Override
+    public void beWriten(Developer developer){
+        developer.create(this);
+    }
+}
+
+class ProjectClass implements ProjectElement  {
+    @Override
+    public void beWriten(Developer developer){
+        developer.create(this);
+    }
+}
+
+class Database implements ProjectElement {
+    @Override
+    public void beWriten(Developer developer){
+        developer.create(this);
+    }
+}
+
+class JavaJune implements Developer{
+    @Override
+    public void create(ProjectClass pc){
+        System.out.println("Project created by June");
+    }
+    @Override
+    public void create(Database db){
+        System.out.println("Database created by June");
+    }
+    
+    @Override
+    public void create(Test test){
+        System.out.println("All test made by June");
+    }
+}
+
+class JavaSenior implements Developer{
+    @Override
+    public void create(ProjectClass pc){
+        System.out.println("SuperProject created by Senior");
+    }
+    @Override
+    public void create(Database db){
+        System.out.println("Fast Database created by Senior");
+    }
+    
+    @Override
+    public void create(Test test){
+        System.out.println("All test made by Senior");
+    }
+}
+
+class Project implements ProjectElement{
+    private final ProjectElement[] pElements;
+    
+    public Project(){
+        pElements = new ProjectElement[]{ 
+            new ProjectClass(), new Database(), new Test()
+            
+        };
+   }
+   @Override
+   public void beWriten(Developer developer){
+       for(ProjectElement pe : pElements){
+           pe.beWriten(developer);
+       }
+   }
+}
+
+
+public class Main
+{
+	public static void main(String[] args) {
+      Project project = new Project();
+      Developer june = new JavaJune();
+      Developer senior = new JavaSenior();
+      
+      System.out.println("June Did it...");
+      project.beWriten(june);
+      
+      
+      System.out.println("\n=====================\n");
+      
+      System.out.println("Good Job by senior!!!");
+      project.beWriten(senior);
+        
+	}
+}
+

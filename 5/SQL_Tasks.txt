@@ -1,0 +1,137 @@
+--First
+CREATE TABLE Person (
+  PersonId INT, 
+  FirstName VARCHAR(255), 
+  LastName VARCHAR(255)
+);
+
+CREATE TABLE Address (
+  AddressId INT, 
+  PersonId INT, 
+  City VARCHAR(255), 
+  State VARCHAR(255)
+);
+
+TRUNCATE TABLE Person;
+INSERT INTO Person (PersonId, LastName, FirstName) VALUES (1, 'Wang', 'Allen');
+INSERT INTO Person (PersonId, LastName, FirstName) VALUES (2, 'Marty', 'McFly');
+
+TRUNCATE TABLE Address;
+INSERT INTO Address (AddressId, PersonId, City, State) VALUES (1, 2, 'New York City', 'New York');
+
+--Decision
+SELECT p.FirstName,
+       p.LastName,
+       a.City,
+       a.State
+FROM Person p
+LEFT JOIN Address a on p.PersonId = a.PersonId;
+
+--Second
+Create table If Not Exists Employee (
+Id int, 
+Salary int
+);
+
+Truncate table Employee;
+insert into Employee (Id, Salary) values ('1', '100');
+insert into Employee (Id, Salary) values ('2', '200');
+insert into Employee (Id, Salary) values ('3', '300');
+
+--Decision
+SELECT MAX(Salary) AS SecondHighestSalary
+FROM Employee
+WHERE Salary < (SELECT MAX(Salary) FROM Employee);
+
+--Third
+Create table If Not Exists Employee 
+(
+ Id int, 
+ Name varchar(255), 
+ Salary int, 
+ ManagerId int
+ );
+Truncate table Employee;
+insert into Employee (Id, Name, Salary, ManagerId) values ('1', 'Joe', '70000', '3');
+insert into Employee (Id, Name, Salary, ManagerId) values ('2', 'Henry', '80000', '4');
+insert into Employee (Id, Name, Salary, ManagerId) values ('3', 'Sam', '60000', null);
+insert into Employee (Id, Name, Salary, ManagerId) values ('4', 'Max', '90000', null);
+
+--Decision
+SELECT e.Name
+FROM Employee e
+JOIN Employee m on e.ManagerId = m.Id
+WHERE e.salary > m.salary;
+
+--Fourth
+Create table If Not Exists Person 
+(
+Id int, 
+Email varchar(255)
+);
+Truncate table Person;
+
+insert into Person (Id, Email) values ('1', 'a@b.com');
+insert into Person (Id, Email) values ('2', 'c@d.com');
+insert into Person (Id, Email) values ('3', 'a@b.com');
+
+--Decision
+select Email
+from Person
+group by Email
+having count(*) > 1;
+
+
+--Fifth
+Create table If Not Exists Customers 
+(
+Id int, 
+Name varchar(255)
+);
+
+Create table If Not Exists Orders 
+(
+Id int, 
+CustomerId int
+);
+
+Truncate table Customers;
+
+insert into Customers (Id, Name) values ('1', 'Joe');
+insert into Customers (Id, Name) values ('2', 'Henry');
+insert into Customers (Id, Name) values ('3', 'Sam');
+insert into Customers (Id, Name) values ('4', 'Max');
+
+Truncate table Orders;
+
+insert into Orders (Id, CustomerId) values ('1', '3');
+insert into Orders (Id, CustomerId) values ('2', '1');
+
+--Decision
+select Name from Customers c
+where not exists(
+select 1 from Orders o
+where o.CustomerId = c.Id
+);
+
+--Sixth
+Create table If Not Exists Courses 
+(
+Student varchar(255), 
+Class varchar(255)
+);
+Truncate table Courses;
+
+insert into Courses (Student, Class) values ('A', 'Math');
+insert into Courses (Student, Class) values ('B', 'English');
+insert into Courses (Student, Class) values ('C', 'Math');
+insert into Courses (Student, Class) values ('D', 'Biology');
+insert into Courses (Student, Class) values ('E', 'Math');
+insert into Courses (Student, Class) values ('F', 'Computer');
+insert into Courses (Student, Class) values ('G', 'Math');
+insert into Courses (Student, Class) values ('H', 'Math');
+insert into Courses (Student, Class) values ('I', 'Math');
+--Decision
+select class from Courses
+group by Class
+having count(*) >=5;
